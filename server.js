@@ -10,7 +10,7 @@ var async     = require('async'),
   webserver   = express(),
   documents = {},
   templates = {},
-  snippets = {};
+  snippets  = {};
 
 /* express config */
 webserver.set('view engine', 'jade');
@@ -25,7 +25,6 @@ webserver.use(function(req, res, next) {
 webserver.get('/', function (req,res) {
   var jadeLocals = { documents: documents, templates: templates, snippets: snippets };
   jadeLocals.markdown = config.welcomeText;
-  jadeLocals.pretty = true;
 
   // Render the Frontpage via Jade.
   res.render('index', jadeLocals);

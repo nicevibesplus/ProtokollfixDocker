@@ -13,11 +13,10 @@ block append head
   script(src='/js/index.js')
 
 block append navleft
-
   - if (Object.keys(documents).length === 0) documents['no documents found.'] = '';
   - if (Object.keys(templates).length === 0) templates['no templates found.'] = '';
   - if (Object.keys(snippets).length === 0) snippets['no snippets found.'] = '';
-  - templates['empty file'] = '/';
+  - templates['empty document'] = '/';
   
   +nav-dropdown(documents, true)(id='menu-documents')
     +glyphicon('folder-open')
@@ -28,7 +27,7 @@ block append navleft
   +nav-dropdown(snippets, false)(id='menu-snippets')
     +glyphicon('indent-left')
     |&nbsp;insert
-  +nav-dropdown({'as file': 'save()', 'as template': 'save("template")', 'as snippet': 'save("snippet")'}, false)(id='menu-save')
+  +nav-dropdown({'as document': 'save()', 'as template': 'save("template")', 'as snippet': 'save("snippet")'}, false)(id='menu-save')
     +glyphicon('floppy-disk')
     |&nbsp;save
 
