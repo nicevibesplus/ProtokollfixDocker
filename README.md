@@ -1,4 +1,4 @@
-![lsmt logo](/img/logo.png?raw=true)
+![lsmt logo](/static/img/logo.png?raw=true)
 ### LaTeX sucks - markdown too.
 
 ---
