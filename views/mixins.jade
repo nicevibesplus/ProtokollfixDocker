@@ -1,0 +1,28 @@
+mixin nav-dropdown(items, href)
+  li.dropdown&attributes(attributes)
+    a.dropdown-toggle(data-toggle="dropdown", role="button")
+      if block
+        block
+      else
+        |dropdown
+      span.caret
+    ul.dropdown-menu
+      each val, index in items
+        -if (href === true)
+          li: a(href=val)=index
+        -else
+          li: a(onclick=val, style={cursor: 'pointer'})=index
+
+mixin alert(type)
+  .alert.alert-dismissible(role='alert' class='alert-' + type)&attributes(attributes)
+    button.close(type='button' data-dismiss='alert' aria-label='Close')
+      span(aria-hidden='true') &times;
+    if block
+      block
+    else
+      strong drink more!
+
+mixin glyphicon(id)
+  span.glyphicon(class='glyphicon-' + id)&attributes(attributes)
+  if block
+    block

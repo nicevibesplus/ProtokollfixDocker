@@ -1,0 +1,28 @@
+{
+  "name": "LSMT",
+  "description": "web based editor & viewer for markdown documents",
+  "main": "node server.js",
+  "authors": [
+    "Norwin Roosen"
+  ],
+  "license": "GPL-3.0",
+  "moduleType": [
+    "node"
+  ],
+  "homepage": "https://github.com/noerw/LSMT",
+  "private": true,
+  "ignore": [
+    "**/.*",
+    "node_modules",
+    "bower_components",
+    "public/vendor/",
+    "test",
+    "tests"
+  ],
+  "dependencies": {
+    "jquery": "~2.2.0",
+    "bootstrap": "~3.3.6",
+    "marked": "~0.3.5",
+    "codemirror": "~5.11.0"
+  }
+}

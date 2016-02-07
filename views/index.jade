@@ -1,0 +1,67 @@
+extends ./base.jade
+
+block append head
+  title LSMT - Editor
+  link(href='/css/index.css', rel='stylesheet')
+  link(href='/bower/codemirror/lib/codemirror.css', rel='stylesheet')
+  script(src='/bower/marked/marked.min.js')
+  script(src='/bower/codemirror/lib/codemirror.js')
+  script(src='/bower/codemirror/addon/mode/overlay.js')
+  script(src='/bower/codemirror/addon/fold/markdown-fold.js')
+  script(src='/bower/codemirror/mode/markdown/markdown.js')
+  script(src='/bower/codemirror/mode/gfm/gfm.js')
+  script(src='/js/index.js')
+
+block append navleft
+
+  - if (Object.keys(documents).length === 0) documents['no documents found.'] = '';
+  - if (Object.keys(templates).length === 0) templates['no templates found.'] = '';
+  - if (Object.keys(snippets).length === 0) snippets['no snippets found.'] = '';
+  - templates['empty file'] = '/';
+  
+  +nav-dropdown(documents, true)(id='menu-documents')
+    +glyphicon('folder-open')
+    |&nbsp;&nbsp;documents
+  +nav-dropdown(templates, true)(id='menu-templates')
+    +glyphicon('file')
+    |&nbsp;new
+  +nav-dropdown(snippets, false)(id='menu-snippets')
+    +glyphicon('indent-left')
+    |&nbsp;insert
+  +nav-dropdown({'as file': 'save()', 'as template': 'save("template")', 'as snippet': 'save("snippet")'}, false)(id='menu-save')
+    +glyphicon('floppy-disk')
+    |&nbsp;save
+
+block prepend navright
+  - if (file) {
+  -   var exports = {};
+  -   for (var format in exportFormats) {
+  -     exports[format] = '/export/' + format + '/' + file;
+  -   }
+    +nav-dropdown(exports, true)(id='menu-export')
+      +glyphicon('export')
+      |&nbsp;export
+  - }
+  
+  +nav-dropdown({'as markdown': 'mail(\'markdown\')', 'as HTML': 'mail(\'html\')'}, false)(id='menu-mail')
+    +glyphicon('envelope')
+    |&nbsp;mail
+  li#btn-help: a(href='https://github.com/adam-p/markdown-here/wiki/Markdown-Cheatsheet' target='_blank')
+    +glyphicon('question-sign')
+    |&nbsp;markdown help
+  li: a#btn-mode(onclick='toggleViewMode()' style={cursor: 'pointer'})
+    +glyphicon('blackboard')
+    |&nbsp;view
+
+block pagecontent
+  .row.visible-xs
+    .container
+      +alert('info')
+        +glyphicon('info-sign')(class='glyphicon-lg')
+        span &nbsp;hiding the editor because of your low screen width.&nbsp;
+        button.btn.btn-default.btn-xs(onclick='toggleViewMode()') show anyway!
+  .row.fullheight
+    .col-sm-6.fullheight#leftcolumn
+      textarea.fullheight.form-control#md-textarea=markdown
+    .col-sm-6.fullheight#rightcolumn
+      .fullheight#html-preview
