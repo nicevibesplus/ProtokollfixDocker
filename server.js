@@ -9,9 +9,7 @@ var async     = require('async'),
   path        = require('path'),
   sanitize    = require('sanitize-filename'),
   webserver   = express(),
-  documents = {},
-  templates = {},
-  snippets  = {};
+  jadeLocals  = { documents: {}, templates: {}, snippets: {} };
 
 /* express config */
 webserver.set('view engine', 'jade');
@@ -24,42 +22,44 @@ webserver.use(function(req, res, next) {
 });
 
 webserver.get('/', function (req,res) {
-  var jadeLocals = { documents: documents, templates: templates, snippets: snippets };
-  jadeLocals.markdown = config.welcomeText;
+  var locals = jadeLocals;
+  locals.markdown = config.welcomeText;
 
   // Render the Frontpage via Jade.
-  res.render('index', jadeLocals);
+  res.render('index', locals);
 });
 
 /* serve the page with a document loaded */
 webserver.get('/document/:file', function (req, res) {
-  var jadeLocals = { documents: documents, templates: templates, snippets: snippets };
-  jadeLocals.file = encodeURIComponent(req.params.file);
-  jadeLocals.exportFormats = config.exportFormats;
+  var locals = jadeLocals;
+  locals.file = encodeURIComponent(req.params.file);
+  locals.exportFormats = {};
+  for (var format in config.exportFormats)
+    locals.exportFormats[format] = '/export/' + format + '/' + locals.file;
   
   // get the file contents
   var filePath = config.directories.documents + sanitize(req.params.file);
   fs.readFile(filePath, 'utf8', function(err, data) {
-    if (err) return res.status(404).end('could not retrieve the document!');
-    jadeLocals.markdown = data;
+    if (err) return res.status(404).end('could not retrieve document!');
+    locals.markdown = data;
 
     // Render the Frontpage via Jade.
-    res.render('index', jadeLocals);
+    res.render('index', locals);
   });
 });
 
 /* serve the page with a template loaded */
 webserver.get('/template/:file', function (req, res) {
-  var jadeLocals = { documents: documents, templates: templates, snippets: snippets };
+  var locals = jadeLocals;
   
   // get the file contents
   var filePath = config.directories.templates + sanitize(req.params.file);
   fs.readFile(filePath, 'utf8', function(err, data) {
-    if (err) return res.status(404).end('could not retrieve the template!');
-    jadeLocals.markdown = data;
+    if (err) return res.status(404).end('could not retrieve template!');
+    locals.markdown = data;
 
     // Render the page via Jade including the markdown data.
-    res.render('index', jadeLocals);
+    res.render('index', locals);
   });
 });
 
@@ -68,7 +68,7 @@ webserver.get('/snippet/:file', function (req, res) {
   // get the file contents
   var filePath = config.directories.snippets + sanitize(req.params.file);
   fs.readFile(filePath, 'utf8', function(err, data) {
-    if (err) return res.status(404).end('could not retrieve the snippet!');
+    if (err) return res.status(404).end('could not retrieve snippet!');
     res.send(data);
   });
 });
@@ -78,7 +78,7 @@ webserver.post('/save', function(req, res) {
   var path = config.directories.documents;
   if (req.body.type === 'template') path = config.directories.templates;
   else if (req.body.type === 'snippet') path = config.directories.snippets;
-  var fileName = sanitize(decodeURIComponent(req.body.name));
+  var fileName = sanitize(decodeURIComponent(req.body.name)).replace(/\s+/g, '_');
 
   fs.outputFile(path + fileName, req.body.markdown, function(err) {
     if (err) return res.status(500).end(err.message);
@@ -121,9 +121,9 @@ webserver.get('/export/:format/:file', function(req, res) {
 });
 
 function loadDirectories(callback) {
-  documents = {};
-  templates = {};
-  snippets = {};
+  jadeLocals.documents = {};
+  jadeLocals.templates = {};
+  jadeLocals.snippets = {};
   
   /* reads the contents of a directory, and inserts their paths in a passed object,
      where the property key is the filename, and the value the URIencoded filename
@@ -147,9 +147,9 @@ function loadDirectories(callback) {
     async.apply(fs.ensureDir, config.directories.documents),
     async.apply(fs.ensureDir, config.directories.templates),
     async.apply(fs.ensureDir, config.directories.snippets),
-    async.apply(readDir, config.directories.documents, documents, config.listExtensions, '/document/', ''),
-    async.apply(readDir, config.directories.templates, templates, config.listExtensions, '/template/', ''),
-    async.apply(readDir, config.directories.snippets, snippets, config.listExtensions, 'insertSnippet("', '")')
+    async.apply(readDir, config.directories.documents, jadeLocals.documents, config.listExtensions, '/document/', ''),
+    async.apply(readDir, config.directories.templates, jadeLocals.templates, config.listExtensions, '/template/', ''),
+    async.apply(readDir, config.directories.snippets, jadeLocals.snippets, config.listExtensions, 'insertSnippet("', '")')
   ], callback);
 }
 

@@ -1,4 +1,3 @@
-
 var codemirror;
 
 function save(type) {
@@ -6,24 +5,19 @@ function save(type) {
   
   dateString = new Date().toISOString().slice(0, 10);
   
-  // if we have a new document or save as template: ask for a filename,
-  // else use the existing one
   var promptTitle = 'Please enter a filename!';
-  if (type == 'template') {
+  // ask for a filename
+  if (type == 'template')
     fileName = prompt('SAVE TEMPLATE\n' + promptTitle);
-  }
-  else if (type == 'snippet') {
+  else if (type == 'snippet')
     fileName = prompt('SAVE SNIPPET\n' + promptTitle);
-  }
-  else if (/^\/document/.test(window.location.pathname)) {
+  else if (/^\/document/.test(window.location.pathname))
     fileName = decodeURIComponent(window.location.pathname.replace('/document/', ''));
-  }
-  else if (/^\/template/.test(window.location.pathname)) {
-    fileName = prompt('SAVE DOCUMENT\n' + promptTitle,
-      dateString + '_' + window.location.pathname.replace('/template/', ''));
-  } else {
+  else if (/^\/template/.test(window.location.pathname))
+    fileName = prompt('SAVE DOCUMENT\n' + promptTitle, dateString + '_' +
+     decodeURIComponent(window.location.pathname.replace('/template/', '')));
+  else
     fileName = prompt('SAVE DOCUMENT\n' + promptTitle);
-  }
   
   // stop invalid filename or user has canceld
   if (!fileName) return;
@@ -34,7 +28,7 @@ function save(type) {
   data = {
     name: encodeURIComponent(fileName),
     markdown: codemirror.getValue(),
-    type: type
+    type: type || 'document'
   };
   
   $.post('/save', data, function(res) {
@@ -73,7 +67,6 @@ function toggleViewMode() {
   $('#menu-templates').toggleClass('hidden');
   $('#menu-snippets').toggleClass('hidden');
   $('#menu-save').toggleClass('hidden');
-  
 }
 
 function insertSnippet(path) {
@@ -86,7 +79,7 @@ $(document).ready(function() {
   
   marked.setOptions({
     pedantic: true,
-  })
+  });
   
   $('#html-preview').html(marked($('#md-textarea').val()));
   
