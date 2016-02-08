@@ -2,9 +2,10 @@ module.exports = {
   httpPort: 8080,
   
   // Paths where the documents will be loaded & saved
+  // subdirectories are not accessible 
   directories: {
     documents: __dirname + '/data/documents/',
-    templates:  __dirname + '/data/templates/',
+    templates: __dirname + '/data/templates/',
     snippets:  __dirname + '/data/snippets/'
   },
   

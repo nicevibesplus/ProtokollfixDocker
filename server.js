@@ -94,7 +94,7 @@ webserver.post('/save', function(req, res) {
    sideeffect: the pdf file will reside in the documents directory */
 webserver.get('/export/:format/:file', function(req, res) {
 
-  var inPath = config.directories.documents + req.params.file,
+  var inPath = config.directories.documents + sanitize(req.params.file),
     inFormat = 'markdown_github+footnotes+definition_lists+raw_html+markdown_in_html_blocks',
     outExtension = config.exportFormats[req.params.format].extension,
     options = config.exportFormats[req.params.format].options,
@@ -125,17 +125,21 @@ function loadDirectories(callback) {
   templates = {};
   snippets = {};
   
-  /* walks through a directory [dir] & stores its filepaths in an object [object]
-      if they have a filextension as in [extensionFilter] */
-  function walkDir(dir, object, extensionFilter, prefix, postfix, done) {
-    fs.walk(dir).on('data', function(file) {
-      var basePath = file.path.replace(dir, ''),
-        fileName = path.basename(basePath),
-        fileExt = path.extname(fileName);
+  /* reads the contents of a directory, and inserts their paths in a passed object,
+     where the property key is the filename, and the value the URIencoded filename
+     with a pre- and postfix string */ 
+  function readDir(dir, object, extensionFilter, prefix, postfix, done) {
+    fs.readdir(dir, function(err, data) {
+      if (err) return done(err);
+      for (var i = 0; i < data.length; i++) {
+        var fileName = data[i],
+          fileExt = path.extname(fileName);
 
-      if (file.stats.isFile() && extensionFilter.indexOf(fileExt) !== -1)
-        object[fileName] = prefix + encodeURIComponent(basePath) + postfix;
-    }).on('end', done);
+        if (fs.statSync(dir + fileName).isFile() && extensionFilter.indexOf(fileExt) !== -1)
+          object[fileName] = prefix + encodeURIComponent(fileName) + postfix;
+      }
+      done();
+    })
   }
   
   // make sure the data directories exist & get their contents
@@ -143,9 +147,9 @@ function loadDirectories(callback) {
     async.apply(fs.ensureDir, config.directories.documents),
     async.apply(fs.ensureDir, config.directories.templates),
     async.apply(fs.ensureDir, config.directories.snippets),
-    async.apply(walkDir, config.directories.documents, documents, config.listExtensions, '/document/', ''),
-    async.apply(walkDir, config.directories.templates, templates, config.listExtensions, '/template/', ''),
-    async.apply(walkDir, config.directories.snippets, snippets, config.listExtensions, 'insertSnippet("', '")')
+    async.apply(readDir, config.directories.documents, documents, config.listExtensions, '/document/', ''),
+    async.apply(readDir, config.directories.templates, templates, config.listExtensions, '/template/', ''),
+    async.apply(readDir, config.directories.snippets, snippets, config.listExtensions, 'insertSnippet("', '")')
   ], callback);
 }
 
