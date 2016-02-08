@@ -9,6 +9,13 @@ module.exports = {
     snippets:  __dirname + '/data/snippets/'
   },
   
+  https: {
+    enabled: false,
+    port: 8443,
+    keyPath:  __dirname + '/private.key',
+    certPath: __dirname + '/certificate.pem'
+  },
+  
   // only files with these extensions will be shown in the filelist
   listExtensions: ['.md', '.markdown', '.mmd'],
   

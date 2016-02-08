@@ -139,7 +139,7 @@ function loadDirectories(callback) {
           object[fileName] = prefix + encodeURIComponent(fileName) + postfix;
       }
       done();
-    })
+    });
   }
   
   // make sure the data directories exist & get their contents
@@ -157,6 +157,24 @@ function loadDirectories(callback) {
 (function init() {
   loadDirectories(function(err) {
     if (err) return debug('unable to retrieve directory contents: ' + err);
+    
+    /* SSL Integration, if enabled in config. must be run before webserver.listen() */
+    if (config.https.enabled) {
+      require('https').createServer({
+        key: fs.readFileSync(config.https.keyPath),
+        cert: fs.readFileSync(config.https.certPath)
+      }, webserver).listen(config.https.port);
+
+      /* Redirect all traffic over SSL */
+      webserver.set('port_https', config.https.port);
+      webserver.all('*', function(req, res, next){
+        if (req.secure) return next();
+        res.redirect("https://" + req.hostname + ":" + config.https.port + req.url);
+      });
+      debug('https server now listening on port ' + config.https.port);
+    }
+    
+    /* start listening! */
     var server = webserver.listen(config.httpPort, function() {
       debug('Webserver running on port ' + server.address().port);
     });
