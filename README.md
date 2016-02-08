@@ -33,15 +33,20 @@ It has some features that might make it interesting though:
 1. install the above dependencies
 2. clone this repo & install npm & bower dependencies
 	
-    	git clone https://github.com/noerw/LSMT.git
+        git clone https://github.com/noerw/LSMT.git
         cd LSMT
         npm install
-        npm install -g bower
-        bower install
+
+If npm reports issues installing bower globally, [change the path to the global npm packages
+to a directory you have write access to](http://www.competa.com/blog/2014/12/how-to-run-npm-without-sudo/),
+which is a good idea anyway.
+Alternatively install bower with sudo (`sudo npm install -g bower`) & run `bower install` manually.
 
 ## run
 
 	npm start
+
+For debug output you may run `npm test`.
 
 ## license
 GPL-3.0
