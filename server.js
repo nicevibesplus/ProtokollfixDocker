@@ -7,6 +7,7 @@ var async     = require('async'),
   express     = require('express'),
   fs          = require('fs-extra'),
   path        = require('path'),
+  sanitize    = require('sanitize-filename'),
   webserver   = express(),
   documents = {},
   templates = {},
@@ -37,7 +38,7 @@ webserver.get('/document/:file', function (req, res) {
   jadeLocals.exportFormats = config.exportFormats;
   
   // get the file contents
-  var filePath = config.directories.documents + req.params.file;
+  var filePath = config.directories.documents + sanitize(req.params.file);
   fs.readFile(filePath, 'utf8', function(err, data) {
     if (err) return res.status(404).end('could not retrieve the document!');
     jadeLocals.markdown = data;
@@ -52,7 +53,7 @@ webserver.get('/template/:file', function (req, res) {
   var jadeLocals = { documents: documents, templates: templates, snippets: snippets };
   
   // get the file contents
-  var filePath = config.directories.templates + req.params.file;
+  var filePath = config.directories.templates + sanitize(req.params.file);
   fs.readFile(filePath, 'utf8', function(err, data) {
     if (err) return res.status(404).end('could not retrieve the template!');
     jadeLocals.markdown = data;
@@ -65,7 +66,7 @@ webserver.get('/template/:file', function (req, res) {
 /* serve a snippet */
 webserver.get('/snippet/:file', function (req, res) {
   // get the file contents
-  var filePath = config.directories.snippets + req.params.file;
+  var filePath = config.directories.snippets + sanitize(req.params.file);
   fs.readFile(filePath, 'utf8', function(err, data) {
     if (err) return res.status(404).end('could not retrieve the snippet!');
     res.send(data);
@@ -77,14 +78,14 @@ webserver.post('/save', function(req, res) {
   var path = config.directories.documents;
   if (req.body.type === 'template') path = config.directories.templates;
   else if (req.body.type === 'snippet') path = config.directories.snippets;
-  path += decodeURIComponent(req.body.name);
+  var fileName = sanitize(decodeURIComponent(req.body.name));
 
-  fs.outputFile(path, req.body.markdown, function(err) {
+  fs.outputFile(path + fileName, req.body.markdown, function(err) {
     if (err) return res.status(500).end(err.message);
     
     loadDirectories(function(err) {
       if (err) return res.status(500).end(err.message);
-      res.json({ saved: true });
+      res.json({ saved: '/' + req.body.type + '/' + fileName });
     });
   });
 });

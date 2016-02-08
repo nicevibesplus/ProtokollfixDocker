@@ -27,7 +27,7 @@ block append navleft
   +nav-dropdown(snippets, false)(id='menu-snippets')
     +glyphicon('indent-left')
     |&nbsp;insert
-  +nav-dropdown({'as document': 'save()', 'as template': 'save("template")', 'as snippet': 'save("snippet")'}, false)(id='menu-save')
+  +nav-dropdown({'as document': 'save("document")', 'as template': 'save("template")', 'as snippet': 'save("snippet")'}, false)(id='menu-save')
     +glyphicon('floppy-disk')
     |&nbsp;save
 

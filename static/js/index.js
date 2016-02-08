@@ -38,9 +38,8 @@ function save(type) {
   };
   
   $.post('/save', data, function(res) {
-    if (res.saved && type == 'template') window.location = '/template/' + encodeURIComponent(fileName);
-    else if (res.saved && type == 'snippet') window.location.reload();
-    else if (res.saved) window.location = '/document/' + encodeURIComponent(fileName);
+    if (res.saved && type === 'snippet') window.location = '/';
+    else if (res.saved) window.location = res.saved;
   });
 }
 
