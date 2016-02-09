@@ -40,7 +40,7 @@ webserver.use(function(req, res, next) {
 });
 
 webserver.get('/', function (req,res) {
-  var locals = jadeLocals;
+  var locals = JSON.parse(JSON.stringify(jadeLocals));
   locals.markdown = config.welcomeText;
 
   // Render the Frontpage via Jade.
@@ -49,7 +49,7 @@ webserver.get('/', function (req,res) {
 
 /* serve the page with a document loaded */
 webserver.get('/document/:file', function (req, res) {
-  var locals = jadeLocals;
+  var locals = JSON.parse(JSON.stringify(jadeLocals));
   locals.file = encodeURIComponent(req.params.file);
   locals.exportFormats = {};
   for (var format in config.exportFormats)
@@ -68,7 +68,7 @@ webserver.get('/document/:file', function (req, res) {
 
 /* serve the page with a template loaded */
 webserver.get('/template/:file', function (req, res) {
-  var locals = jadeLocals;
+  var locals = JSON.parse(JSON.stringify(jadeLocals));;
   
   // get the file contents
   var filePath = config.directories.templates + sanitize(req.params.file);
