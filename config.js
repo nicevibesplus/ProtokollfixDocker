@@ -1,7 +1,7 @@
 module.exports = {
   httpPort: 8080,
   
-  // Paths where the documents will be loaded & saved
+  // paths where the documents will be loaded & saved
   // subdirectories are not accessible 
   directories: {
     documents: __dirname + '/data/documents/',
@@ -13,7 +13,8 @@ module.exports = {
     enabled: false,
     port: 8443,
     keyPath:  __dirname + '/private.key',
-    certPath: __dirname + '/certificate.pem'
+    certPath: __dirname + '/certificate.pem',
+    caPath:   undefined // specify path if needed
   },
   
   // only files with these extensions will be shown in the filelist

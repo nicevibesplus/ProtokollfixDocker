@@ -6,10 +6,28 @@ var async     = require('async'),
   exec        = require('child_process').exec,
   express     = require('express'),
   fs          = require('fs-extra'),
+  https       = require('https'),
   path        = require('path'),
   sanitize    = require('sanitize-filename'),
   webserver   = express(),
   jadeLocals  = { documents: {}, templates: {}, snippets: {} };
+
+/* SSL Integration, if enabled in config. must be run before any route */
+if (config.https.enabled) {
+  https.createServer({
+    key:  fs.readFileSync(config.https.keyPath),
+    cert: fs.readFileSync(config.https.certPath),
+    ca:   config.https.caPath ? fs.readFileSync(config.https.caPath) : undefined
+  }, webserver).listen(config.https.port);
+  
+  /* Redirect all traffic over SSL */
+  webserver.set('port_https', config.https.port);
+  webserver.all('*', function(req, res, next){
+    if (req.secure) return next();
+    res.redirect("https://" + req.hostname + ":" + config.https.port + req.url);
+  });
+  debug('https server now listening on port ' + config.https.port);
+}
 
 /* express config */
 webserver.set('view engine', 'jade');
@@ -154,29 +172,13 @@ function loadDirectories(callback) {
 }
 
 
-(function init() {
+function startWebserver(port) {
   loadDirectories(function(err) {
     if (err) return debug('unable to retrieve directory contents: ' + err);
-    
-    /* SSL Integration, if enabled in config. must be run before webserver.listen() */
-    if (config.https.enabled) {
-      require('https').createServer({
-        key: fs.readFileSync(config.https.keyPath),
-        cert: fs.readFileSync(config.https.certPath)
-      }, webserver).listen(config.https.port);
-
-      /* Redirect all traffic over SSL */
-      webserver.set('port_https', config.https.port);
-      webserver.all('*', function(req, res, next){
-        if (req.secure) return next();
-        res.redirect("https://" + req.hostname + ":" + config.https.port + req.url);
-      });
-      debug('https server now listening on port ' + config.https.port);
-    }
-    
-    /* start listening! */
-    var server = webserver.listen(config.httpPort, function() {
-      debug('Webserver running on port ' + server.address().port);
+    var server = webserver.listen(port, function() {
+      debug('webserver running on port ' + server.address().port);
     });
   });
-})();
+}
+
+startWebserver(config.httpPort);
