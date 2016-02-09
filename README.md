@@ -10,7 +10,7 @@ It has some features that might make it interesting though:
 ## features
 
 - **read/write on file system**
-	- documents are read/written directly on the filesystem, which makes their use in other applications really easy
+	- documents are read/written directly on the servers filesystem, which makes their use in other applications really easy
     - *this also means that this application does not scale well, and is intended for single- (or few-) user scenarios only*
 - create documents from **templates**
 - insert custom **text snippets**
@@ -18,6 +18,7 @@ It has some features that might make it interesting though:
 - exports through **pandoc integration**
 	- directly convert & download documents using pandoc.
     - technically all pandoc supported formats can be used, currently implemented are `PDF`, `HTML5`, `DOCX`, `LaTeX`, `reveal.js`, `MediaWiki`, `DokuWiki`
+- **http auth** for private access. authentication may be restricted to the save functionality for public read-access
 - **mailto link** for the current document
 - **view mode**, which hides the editor for a pure presentation of the document
 - **responsive layout**
