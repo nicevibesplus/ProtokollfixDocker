@@ -1,4 +1,5 @@
 var async     = require('async'),
+  auth        = require('./auth.js')(),
   bodyParser  = require('body-parser'),
   compression = require('compression'),
   config      = require('./config.js'),
@@ -28,6 +29,9 @@ if (config.https.enabled) {
   });
   debug('https server now listening on port ' + config.https.port);
 }
+
+/* authentication for all requests. POST /save is handled seperately */
+if (!config.auth.saveOnly) webserver.use(auth); 
 
 /* express config */
 webserver.set('view engine', 'jade');
@@ -92,7 +96,7 @@ webserver.get('/snippet/:file', function (req, res) {
 });
 
 /* save a file & rescan the directories */
-webserver.post('/save', function(req, res) {
+webserver.post('/save', auth, function(req, res) {
   var path = config.directories.documents;
   if (req.body.type === 'template') path = config.directories.templates;
   else if (req.body.type === 'snippet') path = config.directories.snippets;

@@ -10,11 +10,21 @@ module.exports = {
   },
   
   https: {
-    enabled: false,
-    port: 8443,
+    enabled:  false,
+    port:     8443,
     keyPath:  __dirname + '/private.key',
     certPath: __dirname + '/certificate.pem',
     caPath:   undefined // specify path if needed
+  },
+  
+  // requiring authentication on non-https connections is unsafe!
+  auth: {
+    enabled: false,
+    saveOnly: false,  // only protect write access
+    type: 'basic',
+    basic_keyfile: undefined, // set to undefined to use the credentials below
+    basic_user: 'LSMT',
+    basic_pw: 'change_asap'
   },
   
   // only files with these extensions will be shown in the filelist
