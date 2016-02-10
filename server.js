@@ -31,7 +31,7 @@ if (config.https.enabled) {
 }
 
 /* authentication for all requests. POST /save is handled seperately */
-if (!config.auth.saveOnly) webserver.use(auth); 
+if (config.auth.enabled && !config.auth.saveOnly) webserver.use(auth); 
 
 /* express config */
 webserver.set('view engine', 'jade');
@@ -117,7 +117,7 @@ webserver.post('/save', auth, function(req, res) {
 webserver.get('/export/:format/:file', function(req, res) {
 
   var inPath = config.directories.documents + sanitize(req.params.file),
-    inFormat = 'markdown_github+footnotes+definition_lists+raw_html+markdown_in_html_blocks',
+    inFormat = 'markdown';
     outExtension = config.exportFormats[req.params.format].extension,
     options = config.exportFormats[req.params.format].options,
     outPath = inPath.split('.');
