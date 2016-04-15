@@ -75,13 +75,20 @@ function insertSnippet(path) {
   });
 }
 
+function parseInput() {
+    var yamlParsed, title, text = codemirror.getValue();
+    
+    try {
+      yamlParsed = jsyaml.loadFront(text);
+      title = '<h1>' + (yamlParsed.title || '') + '</h1>';
+      $('#html-preview').html(title + marked(yamlParsed.__content));
+    } catch (e) {
+      $('#html-preview').html(marked(text));
+    }
+}
 $(document).ready(function() {
   
-  marked.setOptions({
-    pedantic: true,
-  });
-  
-  $('#html-preview').html(marked($('#md-textarea').val()));
+  marked.setOptions({ pedantic: true });
   
   codemirror = CodeMirror.fromTextArea($('#md-textarea')[0], {
     mode: 'gfm',
@@ -93,9 +100,9 @@ $(document).ready(function() {
     }
   });
   
-  codemirror.on('change', function() {
-     $('#html-preview').html(marked(codemirror.getValue()));
-  });
+  codemirror.on('change', parseInput);
+  
+  parseInput();
   
   // start in view mode, if we have a device with one-column view or its specified in the url hash
   if($(window).width() < 767 || window.location.hash == '#viewmode')
