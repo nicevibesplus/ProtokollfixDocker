@@ -21,7 +21,6 @@ It has some features that might make it interesting though:
 - **http auth** for private access. authentication may be restricted to the save functionality for public read-access
 - **mailto link** for the current document
 - **view mode**, which hides the editor for a pure presentation of the document
-- **responsive layout**
 
 ## dependencies
 

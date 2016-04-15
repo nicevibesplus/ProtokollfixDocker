@@ -20,7 +20,7 @@ module.exports = {
   // requiring authentication on non-https connections is unsafe!
   auth: {
     enabled: false,
-    saveOnly: false,  // only protect write access
+    saveOnly: false, // only protect write access
     basic: {
       keyfile: null, // path to .htaccess-style keyfile. if null, credentials below are used
       user: 'LSMT',
@@ -32,7 +32,7 @@ module.exports = {
   listExtensions: ['.md', '.markdown', '.mmd'],
   
   // default text on the frontpage / empty document
-  welcomeText: '## Welcome!\n\nStart writing, or select a template above!',
+  welcomeText: '# Welcome!\n![LSMT](img/logo.png)\n\nStart writing **markdown**, or select a template above!\n\nFor more info on this editor see [here](https://github.com/noerw/LSMT).',
   
   // formats available for export using pandoc, see http://pandoc.org/README.html
   exportFormats: {

@@ -72,7 +72,7 @@ webserver.get('/document/:file', function (req, res) {
 
 /* serve the page with a template loaded */
 webserver.get('/template/:file', function (req, res) {
-  var locals = JSON.parse(JSON.stringify(jadeLocals));;
+  var locals = JSON.parse(JSON.stringify(jadeLocals));
   
   // get the file contents
   var filePath = config.directories.templates + sanitize(req.params.file);
@@ -117,13 +117,13 @@ webserver.post('/save', auth, function(req, res) {
 webserver.get('/export/:format/:file', function(req, res) {
 
   var inPath = config.directories.documents + sanitize(req.params.file),
-    inFormat = 'markdown';
+    inFormat = 'markdown',
     outExtension = config.exportFormats[req.params.format].extension,
     options = config.exportFormats[req.params.format].options,
     outPath = inPath.split('.');
   outPath.pop();
   outPath += outExtension;
-  var cmd = ['pandoc -f', inFormat, '-o', outPath, inPath, options].join(' ');
+  var cmd = ['pandoc -f -s', inFormat, '-o', outPath, inPath, options].join(' ');
   
   fs.stat(inPath, function(err, inStat) {
     if (err) return res.status(500).end('input file not found');
@@ -171,7 +171,7 @@ function loadDirectories(callback) {
     async.apply(fs.ensureDir, config.directories.snippets),
     async.apply(readDir, config.directories.documents, jadeLocals.documents, config.listExtensions, '/document/', ''),
     async.apply(readDir, config.directories.templates, jadeLocals.templates, config.listExtensions, '/template/', ''),
-    async.apply(readDir, config.directories.snippets, jadeLocals.snippets, config.listExtensions, 'insertSnippet("', '")')
+    async.apply(readDir, config.directories.snippets, jadeLocals.snippets, config.listExtensions, 'LSMT.insertSnippet("', '")')
   ], callback);
 }
 

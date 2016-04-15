@@ -44,7 +44,7 @@ block prepend navright
   li#btn-help: a(href='https://github.com/adam-p/markdown-here/wiki/Markdown-Cheatsheet' target='_blank')
     +glyphicon('question-sign')
     |&nbsp;markdown help
-  li: a#btn-mode(onclick='toggleViewMode()' style={cursor: 'pointer'})
+  li: a#btn-mode(onclick='LSMT.toggleViewMode()' style={cursor: 'pointer'})
     +glyphicon('blackboard')
     |&nbsp;view
 
@@ -54,7 +54,7 @@ block pagecontent
       +alert('info')
         +glyphicon('info-sign')(class='glyphicon-lg')
         span &nbsp;hiding the editor because of your low screen width.&nbsp;
-        button.btn.btn-default.btn-xs(onclick='toggleViewMode()') show anyway!
+        button.btn.btn-default.btn-xs(onclick='LSMT.toggleViewMode()') show anyway!
   .row.fullheight
     .col-sm-6.fullheight#leftcolumn
       textarea.fullheight.form-control#md-textarea=markdown
