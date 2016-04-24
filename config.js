@@ -37,7 +37,7 @@ module.exports = {
 
   // formats available for export using pandoc, see http://pandoc.org/README.html
   exportFormats: {
-    'PDF': { extension: '.pdf', options: '-t latex -V geometry:margin=2.4cm'},
+    'PDF': { extension: '.pdf', options: '-t latex -V geometry:margin=2.4cm -N'},
     'LaTeX': { extension: '.tex', options: '-t latex -V geometry:margin=2.4cm -s'},
     'HTML': { extension: '.html', options: '-t html5 -s'},
     'reveal.js-Slides': { extension: '-revealjs.html', options: '-t revealjs -s'},

@@ -59,7 +59,7 @@ router.get('/document/:file', function (req, res) {
   locals.file = encodeURIComponent(req.params.file);
   locals.exportFormats = {};
   for (var format in config.exportFormats)
-    locals.exportFormats[format] = '/export/' + format + '/' + locals.file;
+    locals.exportFormats[format] = config.baseURL + '/export/' + format + '/' + locals.file;
 
   // get the file contents
   var filePath = config.directories.documents + sanitize(req.params.file);
@@ -119,13 +119,11 @@ router.post('/save', auth, function(req, res) {
 router.get('/export/:format/:file', function(req, res) {
 
   var inPath = config.directories.documents + sanitize(req.params.file),
-    inFormat = 'markdown',
-    expFormat = config.expFormats[req.params.format],
+    expFormat = config.exportFormats[req.params.format],
     outPath = inPath.split('.');
   outPath.pop();
   outPath += expFormat.extension;
-  var cmd = ['pandoc -f -s', inFormat, '-o', outPath, inPath, expFormat.options].join(' ');
-
+  var cmd = ['pandoc -o', outPath, inPath, expFormat.options].join(' ');
   fs.stat(inPath, function(err, inStat) {
     if (err) return res.status(500).end('input file not found');
 
@@ -135,7 +133,7 @@ router.get('/export/:format/:file', function(req, res) {
       // else generate the output file using pandoc & send it
       else {
         exec(cmd, function(err, stdout, stderr) {
-          if (err) return res.status(500).send(stderr);
+          if (err) return res.status(500).send(stderr + stdout);
           res.download(outPath);
         });
       }
