@@ -2,23 +2,23 @@ extends ./base.jade
 
 block append head
   title LSMT - Editor
-  link(href='/css/index.css', rel='stylesheet')
-  link(href='/bower/codemirror/lib/codemirror.css', rel='stylesheet')
-  script(src='/bower/marked/marked.min.js')
-  script(src='/js/js-yaml-front-client.min.js')
-  script(src='/bower/codemirror/lib/codemirror.js')
-  script(src='/bower/codemirror/addon/mode/overlay.js')
-  script(src='/bower/codemirror/addon/fold/markdown-fold.js')
-  script(src='/bower/codemirror/mode/markdown/markdown.js')
-  script(src='/bower/codemirror/mode/gfm/gfm.js')
-  script(src='/js/index.js')
+  link(href=baseURL + '/css/index.css', rel='stylesheet')
+  link(href=baseURL + '/bower/codemirror/lib/codemirror.css', rel='stylesheet')
+  script(src=baseURL + '/bower/marked/marked.min.js')
+  script(src=baseURL + '/js/js-yaml-front-client.min.js')
+  script(src=baseURL + '/bower/codemirror/lib/codemirror.js')
+  script(src=baseURL + '/bower/codemirror/addon/mode/overlay.js')
+  script(src=baseURL + '/bower/codemirror/addon/fold/markdown-fold.js')
+  script(src=baseURL + '/bower/codemirror/mode/markdown/markdown.js')
+  script(src=baseURL + '/bower/codemirror/mode/gfm/gfm.js')
+  script(src=baseURL + '/js/index.js')
 
 block append navleft
   - if (Object.keys(documents).length === 0) documents['no documents found.'] = '';
   - if (Object.keys(templates).length === 0) templates['no templates found.'] = '';
   - if (Object.keys(snippets).length === 0)  snippets['no snippets found.'] = '';
-  - templates['empty document'] = '/';
-  
+  - templates['empty document'] = baseURL;
+
   +nav-dropdown(documents, true)(id='menu-documents')
     +glyphicon('folder-open')
     |&nbsp;&nbsp;documents
@@ -28,7 +28,7 @@ block append navleft
   +nav-dropdown(snippets, false)(id='menu-snippets')
     +glyphicon('indent-left')
     |&nbsp;insert
-  +nav-dropdown({'as document': 'save("document")', 'as template': 'save("template")', 'as snippet': 'save("snippet")'}, false)(id='menu-save')
+  +nav-dropdown({'as document': 'LSMT.save("document")', 'as template': 'LSMT.save("template")', 'as snippet': 'LSMT.save("snippet")'}, false)(id='menu-save')
     +glyphicon('floppy-disk')
     |&nbsp;save
 
@@ -37,7 +37,7 @@ block prepend navright
     +nav-dropdown(exportFormats, true)(id='menu-export')
       +glyphicon('export')
       |&nbsp;export
-  
+
   +nav-dropdown({'as markdown': 'mail(\'markdown\')', 'as HTML': 'mail(\'html\')'}, false)(id='menu-mail')
     +glyphicon('envelope')
     |&nbsp;mail

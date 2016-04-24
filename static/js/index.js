@@ -1,5 +1,5 @@
 var LSMT = (function() {
-  var codemirror;
+  var codemirror, baseURL;
 
   /**
    * @desc saves the current document to the server
@@ -7,26 +7,26 @@ var LSMT = (function() {
    */
   function save(type) {
     var dateString, fileName, data;
-    
+
     dateString = new Date().toISOString().slice(0, 10);
-    
+
     var promptTitle = 'Please enter a filename!';
     // ask for a filename
     if (type == 'template')
       fileName = prompt('SAVE TEMPLATE\n' + promptTitle);
     else if (type == 'snippet')
       fileName = prompt('SAVE SNIPPET\n' + promptTitle);
-    else if (/^\/document/.test(window.location.pathname))
-      fileName = decodeURIComponent(window.location.pathname.replace('/document/', ''));
-    else if (/^\/template/.test(window.location.pathname))
+    else if (/\/document/.test(window.location.pathname))
+      fileName = decodeURIComponent(window.location.pathname.replace(baseURL + '/document/', ''));
+    else if (/\/template/.test(window.location.pathname))
       fileName = prompt('SAVE DOCUMENT\n' + promptTitle, dateString + '_' +
-      decodeURIComponent(window.location.pathname.replace('/template/', '')));
+      decodeURIComponent(window.location.pathname.replace(baseURL + '/template/', '')));
     else
       fileName = prompt('SAVE DOCUMENT\n' + promptTitle);
-    
+
     // stop invalid filename or user has canceld
     if (!fileName) return;
-    
+
     // ensure we save with .md extension
     if (fileName.split('.').pop() !== 'md') fileName += '.md';
 
@@ -35,8 +35,8 @@ var LSMT = (function() {
       markdown: codemirror.getValue(),
       type: type || 'document'
     };
-    
-    $.post('/save', data, function(res) {
+
+    $.post(baseURL + '/save', data, function(res) {
       if (res.saved && type === 'snippet') window.location = '/';
       else if (res.saved) window.location = res.saved;
     });
@@ -52,7 +52,7 @@ var LSMT = (function() {
       content = $('#html-preview').html();
     else if (type === 'markdown')
       content = codemirror.getValue();
-    
+
     if (!content) return;
     mailtoLink += encodeURIComponent(content);
     window.location = mailtoLink;
@@ -86,7 +86,7 @@ var LSMT = (function() {
    * @path filename of the snippet
    */
   function insertSnippet(path) {
-    $.get('/snippet/' + encodeURIComponent(path), function(data) {
+    $.get(baseURL + '/snippet/' + encodeURIComponent(path), function(data) {
       codemirror.replaceSelection(data);
     });
   }
@@ -97,7 +97,7 @@ var LSMT = (function() {
    */
   function parseInput() {
       var yamlParsed, title, text = codemirror.getValue();
-      
+
       // loadFront() may fail, so we need to catch that
       try {
         yamlParsed = jsyaml.loadFront(text);
@@ -107,30 +107,32 @@ var LSMT = (function() {
         $('#html-preview').html(marked(text));
       }
   }
-  
+
   $(document).ready(function() {
+    baseURL = $('#baseurl').html();
     marked.setOptions({ pedantic: true });
-    
+
     codemirror = CodeMirror.fromTextArea($('#md-textarea')[0], {
       mode: 'gfm',
       lineWrapping: true,
       autofocus: true,
       extraKeys: {
         'Ctrl-S': function(cm) { save(); },
-        'Ctrl-N': function(cm) { window.location = '/'; }
+        'Ctrl-N': function(cm) { window.location = baseURL; }
       }
     });
-    
+
     codemirror.on('change', parseInput);
-    
+
     parseInput(); // initially populate the preview
-    
+
     // start in view mode, if we have a device with one-column view or its specified in the url hash
     if($(window).width() < 767 || window.location.hash == '#viewmode')
       toggleViewMode();
   });
-  
+
   return {
+    save: save,
     insertSnippet: insertSnippet,
     toggleViewMode: toggleViewMode
   };
