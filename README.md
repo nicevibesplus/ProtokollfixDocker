@@ -1,5 +1,6 @@
-![lsmt logo](/static/img/logo.png?raw=true)
-### LaTeX sucks - markdown too.
+![logo](/static/img/logo.png?raw=true)
+> "LaTeX sucks - markdown too."
+> - some peron
 
 ---
 
@@ -36,7 +37,7 @@ It has some features that might make it interesting though:
         sudo apt-get install nodejs pandoc texlive
 
 2. clone this repo & install npm & bower dependencies
-	
+
         git clone https://github.com/noerw/LSMT.git
         cd LSMT
         npm install

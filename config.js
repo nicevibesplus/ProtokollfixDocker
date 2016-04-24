@@ -1,6 +1,6 @@
 module.exports = {
-  httpPort: 8080,
-  baseURL: '', // url prefix, eg '/editor'
+  httpPort: 2344,
+  baseURL: '/protokolle', // url prefix, eg '/editor'
 
   // paths where the documents will be loaded & saved
   // subdirectories are not accessible
@@ -12,18 +12,18 @@ module.exports = {
 
   https: {
     enabled:  false,
-    port:     8443,
-    keyPath:  __dirname + '/private.key',
-    certPath: __dirname + '/certificate.pem',
-    caPath:   null // specify path if needed
+    port:     2345,
+    keyPath:  '/etc/apache2/ssl/geofs-key.pem',
+    certPath: '/etc/apache2/ssl/cert-geofs.pem',
+    caPath:   '/etc/apache2/ssl/wwu-calist-2007.pem'
   },
 
   // requiring authentication on non-https connections is unsafe!
   auth: {
-    enabled: false,
-    saveOnly: false, // only protect write access
+    enabled: true,
+    saveOnly: true, // only protect write access
     basic: {
-      keyfile: null, // path to .htaccess-style keyfile. if null, credentials below are used
+      keyfile: './auth_keys', // path to .htaccess-style keyfile. if null, credentials below are used
       user: 'LSMT',
       pw: 'change_asap'
     }
@@ -33,7 +33,7 @@ module.exports = {
   listExtensions: ['.md', '.markdown', '.mmd'],
 
   // default text on the frontpage / empty document
-  welcomeText: '# Welcome!\n![LSMT](img/logo.png)\n\nStart writing **markdown**, or select a template above!\n\nFor more info on this editor see [here](https://github.com/noerw/LSMT).',
+  welcomeText: '# geofs Protokollfix&trade;\n\n## >howto\n1. Im Menu unter `new` das `FSR Sitzung`-Template laden\n2. Vorlage ausfüllen\n	- unter `insert` finden sich Textschnipsel für Abstimmungen, Tasks, usw\n    - auf Link zu vorherigem Protokoll achten\n3. speichern (unter `save -> as document`, oder mit `ctrl+s`)\n	- den hoffentlich bekannten login von vom FS-Rechner eingeben\n4. PDF über `export -> PDF` erstellen (muss nicht heruntergeladen werden)\n5. ?????\n6. profit!\n\n## >args, wtf soll das hier?!\n- markdown? [**markdown!**](https://github.com/adam-p/markdown-here/wiki/Markdown-Cheatsheet)\n- bei Fragen: Norwin (oder den FSler deines Vertrauens) fragen\n- bei Bugs & Verbesserungen: pull request [auf github](https://github.com/noerw/LSMT) stellen!',
 
   // formats available for export using pandoc, see http://pandoc.org/README.html
   exportFormats: {
