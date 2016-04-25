@@ -8,7 +8,7 @@ var LSMT = (function() {
   function save(type) {
     var dateString, fileName, data;
 
-    dateString = new Date().toISOString().slice(0, 10);
+    dateString = new Date().toISOString().slice(0, 10).replace(/-+/g, '_');
 
     var promptTitle = 'Please enter a filename!';
     // ask for a filename
@@ -37,7 +37,7 @@ var LSMT = (function() {
     };
 
     $.post(baseURL + '/save', data, function(res) {
-      if (res.saved && type === 'snippet') window.location = '/';
+      if (res.saved && type === 'snippet') window.location = baseURL + '/';
       else if (res.saved) window.location = res.saved;
     });
   }

@@ -1,30 +1,41 @@
 ---
 title: Sitzungsprotokoll FSR Geoinformatik
 date: 20.04.2016, 18:00 - 19:00 Uhr
+header-includes: \setcounter{secnumdepth}{2}
 ---
 
 ||
-----------------:|:-----------------------
-**Protokollant:**| Herbert
-**Anwesend:**    | Herbert
-**Sitzungsort:** | Raum 024, Heisenbergstr. 2, Münster
+----------------:|:---------------------------------------------
+**Protokollant:**| Felix
+**Anwesend:**    | Felix, Antonia, JanVan, Matthes, Thilo, Christoph, Judith, Alina, Marvin, Lasse, Specki, Norwin, Christopher, JanS, Sarah, /t, Elisa
+**Sitzungsort:** | Raum 147, Heisenbergstr. 2, Münster
 
-# Organisatorisches
+# Organisation & Übliches
+Anwesend sind alle Anwesenden. Protokoll schreibt der Protokollant. Rede- und Stimmrecht für alle Anwesenden beantragt und genehmigt. Das letzte Protokoll ist geschrieben, in Ordnung und online.
 
-Anwesend sind alle Anwesenden.
-Protokoll schreibt der Protokollant.
-Rede- und Stimmrecht für alle Anwesenden beantragt und genehmigt.
-Das letzte Protokoll ist geschrieben, in Ordnung und [online](https://geofs.uni-muenster.de/protokolle/document/2016-04-20_FSR-Sitzung.md#viewmode).
+## Tasks
+### Dauertasks
+- **Christopher, Thilo, Thilo, Thilo, Fabian, Joana, Joana, Matthes, Matthes**: Kuchen mitbringen!
+- **alle** Abwesenheit im Wiki vermerken oder per Mail abmelden
 
-## alte Aufgaben
-
-- [x] *Datum* **Name**: Task
-- [ ] *Datum* **Name**: Task
-
-# Berichte aus Gremien
+### Erledigte Tasks
 
 
-# Posteingang
+### Nicht erledigte Tasks
+
+
+### Neue Tasks
+
+
+
+## Berichte aus Gremien / HoPo
+### FK
+
+
+### NaWi FK
+
+
+## Posteingang
 
 
 # Sonstiges
