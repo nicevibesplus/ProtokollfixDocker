@@ -1,12 +1,12 @@
 {
-  "name": "LSMT",
+  "name": "Protokollfix",
   "version": "0.0.1",
   "description": "web based editor & viewer for markdown documents",
   "author": "Norwin Roosen",
   "license": "GPL-3.0",
   "repository": {
     "type": "git",
-    "url": "https://github.com/noerw/LSMT"
+    "url": "https://github.com/fs-geofs/Protokollfix"
   },
   "main": "node server.js",
   "scripts": {

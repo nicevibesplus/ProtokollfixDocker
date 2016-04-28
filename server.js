@@ -173,7 +173,7 @@ function loadDirectories(callback) {
     async.apply(readDir, config.directories.templates, jadeLocals.templates,
       config.listExtensions, config.baseURL + '/template/', ''),
     async.apply(readDir, config.directories.snippets, jadeLocals.snippets,
-      config.listExtensions, 'LSMT.insertSnippet("', '")')
+      config.listExtensions, 'protokollfix.insertSnippet("', '")')
   ], callback);
 }
 

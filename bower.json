@@ -1,5 +1,5 @@
 {
-  "name": "LSMT",
+  "name": "Protokollfix",
   "description": "web based editor & viewer for markdown documents",
   "main": "node server.js",
   "authors": [
@@ -9,7 +9,7 @@
   "moduleType": [
     "node"
   ],
-  "homepage": "https://github.com/noerw/LSMT",
+  "homepage": "https://github.com/fs-geofs/Protokollfix",
   "private": true,
   "ignore": [
     "**/.*",

@@ -1,6 +1,6 @@
 ![logo](/static/img/logo.png?raw=true)
 > "LaTeX sucks - markdown too."
-> - some peron
+>   - some person
 
 ---
 
@@ -38,8 +38,8 @@ It has some features that might make it interesting though:
 
 2. clone this repo & install npm & bower dependencies
 
-        git clone https://github.com/noerw/LSMT.git
-        cd LSMT
+        git clone https://github.com/fs-geofs/Protokollfix.git
+        cd Protokollfix
         npm install
 
 If npm reports issues installing bower globally, [change the path to global npm packages

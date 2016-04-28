@@ -1,4 +1,4 @@
-var LSMT = (function() {
+var protokollfix = (function() {
   var codemirror, baseURL;
 
   /**

@@ -1,7 +1,7 @@
 extends ./base.jade
 
 block append head
-  title LSMT - Editor
+  title Protokollfix
   link(href=baseURL + '/css/index.css', rel='stylesheet')
   link(href=baseURL + '/bower/codemirror/lib/codemirror.css', rel='stylesheet')
   script(src=baseURL + '/bower/marked/marked.min.js')
@@ -28,7 +28,7 @@ block append navleft
   +nav-dropdown(snippets, false)(id='menu-snippets')
     +glyphicon('indent-left')
     |&nbsp;insert
-  +nav-dropdown({'as document': 'LSMT.save("document")', 'as template': 'LSMT.save("template")', 'as snippet': 'LSMT.save("snippet")'}, false)(id='menu-save')
+  +nav-dropdown({'as document': 'protokollfix.save("document")', 'as template': 'protokollfix.save("template")', 'as snippet': 'protokollfix.save("snippet")'}, false)(id='menu-save')
     +glyphicon('floppy-disk')
     |&nbsp;save
 
@@ -44,7 +44,7 @@ block prepend navright
   li#btn-help: a(href='https://github.com/adam-p/markdown-here/wiki/Markdown-Cheatsheet' target='_blank')
     +glyphicon('question-sign')
     |&nbsp;markdown help
-  li: a#btn-mode(onclick='LSMT.toggleViewMode()' style={cursor: 'pointer'})
+  li: a#btn-mode(onclick='protokollfix.toggleViewMode()' style={cursor: 'pointer'})
     +glyphicon('blackboard')
     |&nbsp;view
 
@@ -54,7 +54,7 @@ block pagecontent
       +alert('info')
         +glyphicon('info-sign')(class='glyphicon-lg')
         span &nbsp;hiding the editor because of your low screen width.&nbsp;
-        button.btn.btn-default.btn-xs(onclick='LSMT.toggleViewMode()') show anyway!
+        button.btn.btn-default.btn-xs(onclick='protokollfix.toggleViewMode()') show anyway!
   .row.fullheight
     .col-sm-6.fullheight#leftcolumn
       textarea.fullheight.form-control#md-textarea=markdown
