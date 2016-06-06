@@ -38,9 +38,9 @@ var protokollfix = (function() {
 
     $.post(baseURL + '/save', data, function(res) {
       if (res.saved) {
-        if (data.type === 'snippet')  window.location = baseURL + '/';
-        if (data.type === 'document') window.location = baseURL + '/export/PDF/' + data.name;
-        else window.location = res.saved;
+        if (data.type === 'snippet') return window.location = baseURL + '/';
+        if (data.type === 'document') $.get(baseURL + '/export/PDF/' + data.name);
+        window.location = res.saved;
       }
     });
   }
