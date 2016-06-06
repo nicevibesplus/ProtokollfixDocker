@@ -12,7 +12,7 @@ module.exports = function() {
       keyfileAvailable = fs.statSync(config.auth.basic.keyfile).isFile();
 
     basic = httpAuth.basic({
-      realm: 'Protokollfix - Editor',
+      realm: config.auth.basic.realm_name || 'Protokollfix - Editor',
       file: config.auth.basic.keyfile
     }, keyfileAvailable ? undefined : basicConfigCredentials);
 

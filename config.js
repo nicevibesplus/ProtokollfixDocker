@@ -21,11 +21,12 @@ module.exports = {
   // requiring authentication on non-https connections is unsafe!
   auth: {
     enabled: true,
-    saveOnly: true, // only protect write access
+    saveOnly: false, // only protect write access
     basic: {
       keyfile: './auth_keys', // path to .htaccess-style keyfile. if null, credentials below are used
       user: 'LSMT',
-      pw: 'change_asap'
+      pw: 'change_asap',
+      realm_name: 'Protokollfix -- login wie auf mondbasis'
     }
   },
 
