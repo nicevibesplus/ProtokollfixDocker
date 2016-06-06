@@ -37,8 +37,11 @@ var protokollfix = (function() {
     };
 
     $.post(baseURL + '/save', data, function(res) {
-      if (res.saved && type === 'snippet') window.location = baseURL + '/';
-      else if (res.saved) window.location = res.saved;
+      if (res.saved) {
+        if (data.type === 'snippet')  window.location = baseURL + '/';
+        if (data.type === 'document') window.location = baseURL + '/export/PDF/' + data.name;
+        else window.location = res.saved;
+      }
     });
   }
 
