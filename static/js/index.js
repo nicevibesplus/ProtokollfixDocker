@@ -6,11 +6,10 @@ var protokollfix = (function() {
    * @param type: String 'template', 'snippet' or 'document'. default: 'document'
    */
   function save(type) {
-    var dateString, fileName, data;
+    var dateString, fileName, data, promptTitle = 'Please enter a filename!';
 
     dateString = new Date().toISOString().slice(0, 10).replace(/-+/g, '_');
 
-    var promptTitle = 'Please enter a filename!';
     // ask for a filename
     if (type == 'template')
       fileName = prompt('SAVE TEMPLATE\n' + promptTitle);
@@ -136,6 +135,7 @@ var protokollfix = (function() {
 
   return {
     save: save,
+    mail: mail,
     insertSnippet: insertSnippet,
     toggleViewMode: toggleViewMode
   };
