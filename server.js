@@ -12,7 +12,6 @@ var async     = require('async'),
   sanitize    = require('sanitize-filename'),
   webserver   = express(),
   router      = express.Router();
-  jadeLocals  = { documents: {}, templates: {}, snippets: {}, baseURL: config.baseURL };
 
 /* SSL Integration, if enabled in config. must be run before any route */
 if (config.https.enabled) {
@@ -36,6 +35,7 @@ if (config.auth.enabled && !config.auth.saveOnly) webserver.use(auth);
 
 /* express config */
 webserver.set('view engine', 'pug');
+webserver.locals = { documents: {}, templates: {}, snippets: {}, baseURL: config.baseURL };
 webserver.use(compression());
 webserver.use(bodyParser.urlencoded({ extended: true }));
 webserver.use(config.baseURL, express.static('static'));
@@ -46,18 +46,17 @@ webserver.use(function(req, res, next) {
 });
 
 router.get('/', function (req,res) {
-  var locals = JSON.parse(JSON.stringify(jadeLocals));
-  locals.markdown = config.welcomeText;
-
   // Render the Frontpage via Jade aka pug.
-  res.render('index', locals);
+  res.render('index', { markdown: config.welcomeText });
 });
 
 /* serve the page with a document loaded */
 router.get('/document/:file', function (req, res) {
-  var locals = JSON.parse(JSON.stringify(jadeLocals));
-  locals.file = encodeURIComponent(req.params.file);
-  locals.exportFormats = {};
+  var locals = {
+    file: encodeURIComponent(req.params.file),
+    exportFormats: {}
+  };
+
   for (var format in config.exportFormats)
     locals.exportFormats[format] = config.baseURL + '/export/' + format + '/' + locals.file;
 
@@ -74,16 +73,13 @@ router.get('/document/:file', function (req, res) {
 
 /* serve the page with a template loaded */
 router.get('/template/:file', function (req, res) {
-  var locals = JSON.parse(JSON.stringify(jadeLocals));
-
   // get the file contents
   var filePath = config.directories.templates + sanitize(req.params.file);
   fs.readFile(filePath, 'utf8', function(err, data) {
     if (err) return res.status(404).end('could not retrieve template!');
-    locals.markdown = data;
 
     // Render the page via Jade including the markdown data.
-    res.render('index', locals);
+    res.render('index', { markdown: data });
   });
 });
 
@@ -142,9 +138,8 @@ router.get('/export/:format/:file', function(req, res) {
 });
 
 function loadDirectories(callback) {
-  jadeLocals.documents = {};
-  jadeLocals.templates = {};
-  jadeLocals.snippets = {};
+  // reset the filelist
+  webserver.locals = { documents: {}, templates: {}, snippets: {}, baseURL: config.baseURL };
 
   /* reads the contents of a directory, and inserts their paths in a passed object,
      where the property key is the filename, and the value the URIencoded filename
@@ -168,11 +163,11 @@ function loadDirectories(callback) {
     async.apply(fs.ensureDir, config.directories.documents),
     async.apply(fs.ensureDir, config.directories.templates),
     async.apply(fs.ensureDir, config.directories.snippets),
-    async.apply(readDir, config.directories.documents, jadeLocals.documents,
+    async.apply(readDir, config.directories.documents, webserver.locals.documents,
       config.listExtensions, config.baseURL + '/document/', ''),
-    async.apply(readDir, config.directories.templates, jadeLocals.templates,
+    async.apply(readDir, config.directories.templates, webserver.locals.templates,
       config.listExtensions, config.baseURL + '/template/', ''),
-    async.apply(readDir, config.directories.snippets, jadeLocals.snippets,
+    async.apply(readDir, config.directories.snippets, webserver.locals.snippets,
       config.listExtensions, 'protokollfix.insertSnippet("', '")')
   ], callback);
 }
