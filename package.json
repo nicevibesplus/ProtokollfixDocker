@@ -14,14 +14,14 @@
     "test": "DEBUG=main, node server.js"
   },
   "dependencies": {
-    "async": "^1.5.2",
-    "body-parser": "^1.14.2",
-    "compression": "^1.6.1",
-    "express": "^4.13.4",
-    "fs-extra": "^0.26.5",
-    "http-auth": "^2.2.8",
-    "jade": "^1.11.0",
-    "sanitize-filename": "^1.5.3"
+    "async": "^2.0.1",
+    "body-parser": "^1.15.2",
+    "compression": "^1.6.2",
+    "express": "^4.14.0",
+    "fs-extra": "^0.30.0",
+    "http-auth": "^2.4.10",
+    "pug": "^2.0.0-beta6",
+    "sanitize-filename": "^1.6.0"
   },
   "devDependencies": {
     "debug": "^2.2.0"

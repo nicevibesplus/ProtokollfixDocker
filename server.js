@@ -35,7 +35,7 @@ if (config.https.enabled) {
 if (config.auth.enabled && !config.auth.saveOnly) webserver.use(auth);
 
 /* express config */
-webserver.set('view engine', 'jade');
+webserver.set('view engine', 'pug');
 webserver.use(compression());
 webserver.use(bodyParser.urlencoded({ extended: true }));
 webserver.use(config.baseURL, express.static('static'));
@@ -49,7 +49,7 @@ router.get('/', function (req,res) {
   var locals = JSON.parse(JSON.stringify(jadeLocals));
   locals.markdown = config.welcomeText;
 
-  // Render the Frontpage via Jade.
+  // Render the Frontpage via Jade aka pug.
   res.render('index', locals);
 });
 

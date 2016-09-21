@@ -104,15 +104,15 @@ var protokollfix = (function() {
       try {
         yamlParsed = jsyaml.loadFront(text);
         title = '<h1>' + (yamlParsed.title || '') + '</h1>';
-        $('#html-preview').html(title + marked(yamlParsed.__content));
+        $('#html-preview').html(title + kramed(yamlParsed.__content));
       } catch (e) {
-        $('#html-preview').html(marked(text));
+        $('#html-preview').html(kramed(text));
       }
   }
 
   $(document).ready(function() {
     baseURL = $('#baseurl').html();
-    marked.setOptions({ pedantic: true });
+    kramed.setOptions({ pedantic: true });
 
     codemirror = CodeMirror.fromTextArea($('#md-textarea')[0], {
       mode: 'gfm',
