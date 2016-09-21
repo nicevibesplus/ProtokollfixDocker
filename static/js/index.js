@@ -35,10 +35,10 @@ var protokollfix = (function() {
       type: type || 'document'
     };
 
-    $.post(baseURL + '/save', data, function(res) {
+    $.post(baseURL + '/api/save', data, function(res) {
       if (res.saved) {
         if (data.type === 'snippet') return window.location = baseURL + '/';
-        if (data.type === 'document') $.get(baseURL + '/export/PDF/' + data.name);
+        if (data.type === 'document') $.get(baseURL + '/api/export/PDF/' + data.name);
         window.location = res.saved;
       }
     });
@@ -88,7 +88,7 @@ var protokollfix = (function() {
    * @path filename of the snippet
    */
   function insertSnippet(path) {
-    $.get(baseURL + '/snippet/' + encodeURIComponent(path), function(data) {
+    $.get(baseURL + '/api/snippet/' + encodeURIComponent(path), function(data) {
       codemirror.replaceSelection(data);
     });
   }
