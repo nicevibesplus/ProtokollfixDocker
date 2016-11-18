@@ -60,3 +60,8 @@ For debug output you may run `npm test`.
 GPL-3.0
 
 Used software packages are licensed under their own terms.
+
+## TODO
+
+- sync scroll in both views via [scroll map](https://github.com/markdown-it/markdown-it/blob/master/support/demo_template/index.js#L227-L348)
+- cache for files & templates? https://www.npmjs.com/package/lru-cache

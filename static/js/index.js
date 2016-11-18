@@ -112,10 +112,13 @@ var protokollfix = (function() {
 
   $(document).ready(function() {
     baseURL = $('#baseurl').html();
-    kramed.setOptions({ pedantic: true });
+    kramed.setOptions({
+      pedantic: true,
+      gfm: false,
+    });
 
     codemirror = CodeMirror.fromTextArea($('#md-textarea')[0], {
-      mode: 'gfm',
+      mode: 'markdown',
       lineWrapping: true,
       autofocus: true,
       extraKeys: {
