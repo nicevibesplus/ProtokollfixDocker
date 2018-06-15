@@ -22,21 +22,22 @@ block append navleft
   +nav-dropdown(documents, true)(id='menu-documents')
     +glyphicon('folder-open')
     |&nbsp;&nbsp;documents
-  +nav-dropdown(templates, true)(id='menu-templates')
-    +glyphicon('file')
-    |&nbsp;new
+  //- +nav-dropdown(templates, true)(id='menu-templates')
+  //-   +glyphicon('file')
+  //-   |&nbsp;new
   +nav-dropdown(snippets, false)(id='menu-snippets')
     +glyphicon('indent-left')
     |&nbsp;insert
-  +nav-dropdown({'as document': 'protokollfix.save("document")', 'as template': 'protokollfix.save("template")', 'as snippet': 'protokollfix.save("snippet")'}, false)(id='menu-save')
+  //- +nav-dropdown({'as document': 'protokollfix.save("document")', 'as template': 'protokollfix.save("template")', 'as snippet': 'protokollfix.save("snippet")'}, false)(id='menu-save')
+  li: a(onclick='protokollfix.save("document")' style={cursor: 'pointer'})
     +glyphicon('floppy-disk')
     |&nbsp;save
 
 block prepend navright
-  if exportFormats
-    +nav-dropdown(exportFormats, true)(id='menu-export')
-      +glyphicon('export')
-      |&nbsp;export
+  //- if exportFormats
+  //-   +nav-dropdown(exportFormats, true)(id='menu-export')
+  //-     +glyphicon('export')
+  //-     |&nbsp;export
 
   +nav-dropdown({'as markdown': 'protokollfix.mail(\'markdown\')', 'as HTML': 'protokollfix.mail(\'html\')'}, false)(id='menu-mail')
     +glyphicon('envelope')
@@ -44,9 +45,9 @@ block prepend navright
   li#btn-help: a(href='https://github.com/adam-p/markdown-here/wiki/Markdown-Cheatsheet' target='_blank')
     +glyphicon('question-sign')
     |&nbsp;markdown help
-  li: a#btn-mode(onclick='protokollfix.toggleViewMode()' style={cursor: 'pointer'})
-    +glyphicon('blackboard')
-    |&nbsp;view
+  //- li: a#btn-mode(onclick='protokollfix.toggleViewMode()' style={cursor: 'pointer'})
+  //-   +glyphicon('blackboard')
+  //-   |&nbsp;view
 
 block pagecontent
   .row.visible-xs
