@@ -10,14 +10,6 @@ module.exports = {
     snippets:  __dirname + '/data/snippets/'
   },
 
-  https: {
-    enabled:  false,
-    port:     2345,
-    keyPath:  '/etc/apache2/ssl/geofs-key.pem',
-    certPath: '/etc/apache2/ssl/cert-geofs.pem',
-    caPath:   '/etc/apache2/ssl/wwu-calist-2007.pem'
-  },
-
   // requiring authentication on non-https connections is unsafe!
   auth: {
     enabled: true,

@@ -1,9 +1,7 @@
 var bodyParser = require('body-parser'),
   compression = require('compression'),
   debug       = require('debug')('main'),
-  express     = require('express'),
-  fs          = require('fs'),
-  https       = require('https');
+  express     = require('express');
 
 var auth      = require('./lib/auth')(),
   config      = require('./config'),
@@ -12,23 +10,6 @@ var auth      = require('./lib/auth')(),
   loadDirectories = require('./lib/loadDirectories');
 
 var webserver = express();
-
-/* SSL Integration, if enabled in config. must be run before any route */
-if (config.https.enabled) {
-  https.createServer({
-    key:  fs.readFileSync(config.https.keyPath),
-    cert: fs.readFileSync(config.https.certPath),
-    ca:   config.https.caPath ? fs.readFileSync(config.https.caPath) : undefined
-  }, webserver).listen(config.https.port);
-
-  /* Redirect all traffic over SSL */
-  webserver.set('port_https', config.https.port);
-  webserver.all('*', function(req, res, next){
-    if (req.secure) return next();
-    res.redirect("https://" + req.hostname + ":" + config.https.port + req.url);
-  });
-  debug('https server now listening on port ' + config.https.port);
-}
 
 /* authentication for all requests. POST /save is handled seperately */
 if (config.auth.enabled && !config.auth.saveOnly) webserver.use(auth);
