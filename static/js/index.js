@@ -118,9 +118,10 @@ var protokollfix = (function() {
 
   $(document).ready(function() {
     baseURL = $('#baseurl').html();
+    // gfm fixes table rendering, but also renders stuff correctly that fails in pandoc (lists without preceding blank line )
+    // see #5, #1
     kramed.setOptions({
-      pedantic: true,
-      gfm: false,
+      gfm: true,
     });
 
     codemirror = CodeMirror.fromTextArea($('#md-textarea')[0], {
