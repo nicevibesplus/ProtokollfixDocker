@@ -33,15 +33,22 @@ block append navleft
     +glyphicon('floppy-disk')
     |&nbsp;save
 
+  - if (file)
+      //- FIXME: this is really hacky
+      - pdfURL = `https://geofs.uni-muenster.de/wp/wp-content/uploads/protokolle/${year}/${file.replace('.md', '.pdf')}`;
+      li#btn-pdf: a(href=pdfURL target='_blank')
+        +glyphicon('file')
+        |&nbsp;PDF
+
 block prepend navright
   //- if exportFormats
   //-   +nav-dropdown(exportFormats, true)(id='menu-export')
   //-     +glyphicon('export')
   //-     |&nbsp;export
 
-  +nav-dropdown({'as markdown': 'protokollfix.mail(\'markdown\')', 'as HTML': 'protokollfix.mail(\'html\')'}, false)(id='menu-mail')
-    +glyphicon('envelope')
-    |&nbsp;mail
+  //- +nav-dropdown({'as markdown': 'protokollfix.mail(\'markdown\')', 'as HTML': 'protokollfix.mail(\'html\')'}, false)(id='menu-mail')
+  //-   +glyphicon('envelope')
+  //-   |&nbsp;mail
   li#btn-help: a(href='https://github.com/adam-p/markdown-here/wiki/Markdown-Cheatsheet' target='_blank')
     +glyphicon('question-sign')
     |&nbsp;markdown help
