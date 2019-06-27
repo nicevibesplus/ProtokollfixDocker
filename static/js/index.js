@@ -1,5 +1,10 @@
 var protokollfix = (function() {
   var codemirror, baseURL;
+  var notsaved = false;
+
+  window.onbeforeunload = function() {
+    if (notsaved) return 'Ungespeicherte Änderungen, wirklich schließen?';
+  };
 
   /**
    * @desc saves the current document to the server
@@ -39,6 +44,7 @@ var protokollfix = (function() {
       if (res.saved) {
         if (data.type === 'snippet') return window.location = baseURL + '/';
         if (data.type === 'document') $.get(baseURL + '/api/export/PDF/' + data.name);
+        notsaved = false;
         window.location = res.saved;
       }
     });
@@ -127,7 +133,10 @@ var protokollfix = (function() {
       }
     });
 
-    codemirror.on('change', parseInput);
+    codemirror.on('change', function () {
+      parseInput();
+      notsaved = true;
+    });
 
     parseInput(); // initially populate the preview
 
