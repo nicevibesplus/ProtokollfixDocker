@@ -2,16 +2,8 @@ extends ./base
 
 block append head
   title Protokollfix
+  link(href=baseURL + '/css/easymde.min.css', rel='stylesheet')
   link(href=baseURL + '/css/index.css', rel='stylesheet')
-  link(href=baseURL + '/bower/codemirror/lib/codemirror.css', rel='stylesheet')
-  script(src=baseURL + '/bower/kramed/kramed.min.js')
-  script(src=baseURL + '/js/js-yaml-front-client.min.js')
-  script(src=baseURL + '/bower/codemirror/lib/codemirror.js')
-  script(src=baseURL + '/bower/codemirror/addon/mode/overlay.js')
-  script(src=baseURL + '/bower/codemirror/addon/fold/markdown-fold.js')
-  script(src=baseURL + '/bower/codemirror/mode/markdown/markdown.js')
-  script(src=baseURL + '/bower/codemirror/mode/gfm/gfm.js')
-  script(src=baseURL + '/js/index.js')
 
 block append navleft
   - if (Object.keys(documents).length === 0) documents['no documents found.'] = '';
@@ -29,7 +21,7 @@ block append navleft
     +glyphicon('indent-left')
     |&nbsp;insert
   //- +nav-dropdown({'as document': 'protokollfix.save("document")', 'as template': 'protokollfix.save("template")', 'as snippet': 'protokollfix.save("snippet")'}, false)(id='menu-save')
-  li: a(onclick='protokollfix.save("document")' style={cursor: 'pointer'})
+  li: a(onclick='save("document")' style={cursor: 'pointer'})
     +glyphicon('floppy-disk')
     |&nbsp;save
 
@@ -49,7 +41,7 @@ block prepend navright
   //- +nav-dropdown({'as markdown': 'protokollfix.mail(\'markdown\')', 'as HTML': 'protokollfix.mail(\'html\')'}, false)(id='menu-mail')
   //-   +glyphicon('envelope')
   //-   |&nbsp;mail
-  li#btn-help: a(href='https://github.com/adam-p/markdown-here/wiki/Markdown-Cheatsheet' target='_blank')
+  li#btn-help: a(href='https://simplemde.com/markdown-guide' target='_blank')
     +glyphicon('question-sign')
     |&nbsp;markdown help
   //- li: a#btn-mode(onclick='protokollfix.toggleViewMode()' style={cursor: 'pointer'})
@@ -57,14 +49,9 @@ block prepend navright
   //-   |&nbsp;view
 
 block pagecontent
-  .row.visible-xs
-    .container
-      +alert('info')
-        +glyphicon('info-sign')(class='glyphicon-lg')
-        span &nbsp;hiding the editor because of your low screen width.&nbsp;
-        button.btn.btn-default.btn-xs(onclick='protokollfix.toggleViewMode()') show anyway!
   .row.fullheight
-    .col-sm-6.fullheight#leftcolumn
+    .col-sm-12.fullheight#leftcolumn
       textarea.fullheight.form-control#md-textarea=markdown
-    .col-sm-6.fullheight#rightcolumn
-      .fullheight#html-preview
+
+  script(src=baseURL + '/js/easymde.min.js')
+  script(src=baseURL + '/js/index.js')

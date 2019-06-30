@@ -21,8 +21,6 @@
   ],
   "dependencies": {
     "jquery": "~3.1.0",
-    "bootstrap": "~3.3.7",
-    "kramed": "~0.5.6",
-    "codemirror": "~5.19.0"
+    "bootstrap": "~3.3.7"
   }
 }

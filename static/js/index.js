@@ -1,155 +1,96 @@
-var protokollfix = (function() {
-  var codemirror, baseURL;
-  var notsaved = false;
+const baseURL = document.querySelector('#baseurl').textContent;
 
-  window.onbeforeunload = function() {
-    if (notsaved) return 'Ungespeicherte Änderungen, wirklich schließen?';
-  };
+const ABSTIMMUNG = `
 
-  /**
-   * @desc saves the current document to the server
-   * @param type: String 'template', 'snippet' or 'document'. default: 'document'
-   */
-  function save(type) {
-    var dateString, fileName, data, promptTitle = 'Please enter a filename!';
+#### Abstimmung
+über _______
 
-    dateString = new Date().toISOString().slice(0, 10).replace(/-+/g, '_');
+||
+------------:|:---
+ dafür:      |
+ dagegen:    |
+ Enthaltung: |
+ gesamt:     |
 
-    // ask for a filename
-    if (type == 'template')
-      fileName = prompt('SAVE TEMPLATE\n' + promptTitle);
-    else if (type == 'snippet')
-      fileName = prompt('SAVE SNIPPET\n' + promptTitle);
-    else if (/\/document/.test(window.location.pathname))
-      fileName = decodeURIComponent(window.location.pathname.replace(baseURL + '/document/', ''));
-    else if (/\/template/.test(window.location.pathname))
-      fileName = prompt('SAVE DOCUMENT\n' + promptTitle, dateString + '_' +
-      decodeURIComponent(window.location.pathname.replace(baseURL + '/template/', '')));
-    else
-      fileName = prompt('SAVE DOCUMENT\n' + promptTitle);
+Der Antrag wurde ____.
+`
 
-    // stop invalid filename or user has canceld
-    if (!fileName) return;
+const editor = new EasyMDE({
+  autofocus: true,
+  autoDownloadFontAwesome: false, // we have a newer version vendored.
+  spellChecker: false,
 
-    // ensure we save with .md extension
-    if (fileName.split('.').pop() !== 'md') fileName += '.md';
+  toolbar: [
+    'heading-2',
+    'heading-3',
+    'unordered-list',
+    'link',
+    'image',
+    'table',
+    '|', // Separator
+    {
+      name: 'task',
+      action: function customFunction (editor) {
+        editor.codemirror.replaceSelection(`- *${new Date().toLocaleDateString('de')}* **Name**: Task\n`)
+      },
+      className: 'fas fa-tasks',
+      title: 'Task einfügen',
+    },
+    {
+      name: 'abstimmung',
+      action: ed => ed.codemirror.replaceSelection(ABSTIMMUNG),
+      className: 'fas fa-poll',
+      title: 'Abstimmung einfügen',
+    },
+    '|', // Separator
+    'preview',
+  ],
+});
 
-    data = {
-      name: encodeURIComponent(fileName),
-      markdown: codemirror.getValue(),
-      type: type || 'document'
-    };
+let notsaved = false;
 
-    $.post(baseURL + '/api/save', data, function(res) {
-      if (res.saved) {
-        if (data.type === 'snippet') return window.location = baseURL + '/';
-        if (data.type === 'document') $.get(baseURL + '/api/export/PDF/' + data.name);
-        notsaved = false;
-        window.location = res.saved;
-      }
-    });
-  }
+editor.codemirror.on('change', function () {
+  notsaved = true;
+});
 
-  /**
-   * @desc opens a mailto link containing the document
-   * @param type: 'html' or 'markdown'
-   */
-  function mail(type) {
-    var content, mailtoLink = 'mailto:?to=&body=';
-    if (type === 'html')
-      content = $('#html-preview').html();
-    else if (type === 'markdown')
-      content = codemirror.getValue();
+window.onbeforeunload = function() {
+  if (notsaved) return 'Ungespeicherte Änderungen, wirklich schließen?';
+};
 
-    if (!content) return;
-    mailtoLink += encodeURIComponent(content);
-    window.location = mailtoLink;
-  }
+async function save() {
+  const promptTitle = 'Please enter a filename!';
+  const dateString = new Date().toISOString().slice(0, 10).replace(/-+/g, '_');
 
-  /**
-   * @desc shows & hides the editor
-   */
-  function toggleViewMode() {
-    var btnTxt = $('#btn-mode').html();
+  let fileName;
 
-    if (btnTxt.indexOf('view') === -1) {
-      btnTxt = btnTxt.replace('edit', 'view').replace('pencil', 'blackboard');
-      window.location.hash = '';
-    } else {
-      btnTxt = btnTxt.replace('view', 'edit').replace('blackboard', 'pencil');
-      window.location.hash = 'viewmode';
-    }
+  // ask for a filename
+  if (/\/document/.test(window.location.pathname))
+    fileName = decodeURIComponent(window.location.pathname.replace(baseURL + '/document/', ''));
+  else if (/\/template/.test(window.location.pathname))
+    fileName = prompt('SAVE DOCUMENT\n' + promptTitle, dateString + '_' +
+    decodeURIComponent(window.location.pathname.replace(baseURL + '/template/', '')));
+  else
+    fileName = prompt('SAVE DOCUMENT\n' + promptTitle);
 
-    $('#btn-mode').html(btnTxt);
-    $('#rightcolumn').toggleClass('fullheight col-sm-6 col-sm-12');
-    $('#leftcolumn').toggleClass('hidden');
-    $('#btn-help').toggleClass('hidden');
-    $('#menu-templates').toggleClass('hidden');
-    $('#menu-snippets').toggleClass('hidden');
-    $('#menu-save').toggleClass('hidden');
-  }
+  if (!fileName) return;
+  if (fileName.split('.').pop() !== 'md') fileName += '.md';
 
-  /**
-   * @desc inserts a textsnippet at the current editor selection
-   * @path filename of the snippet
-   */
-  function insertSnippet(path) {
-    $.get(baseURL + '/api/snippet/' + encodeURIComponent(path), function(data) {
-      codemirror.replaceSelection(data);
-    });
-  }
+  const name = encodeURIComponent(fileName)
 
-  /**
-   * @desc parses the current content of the editor to markdown.
-   *       if it begins with a yaml metadata header, it is parsed first
-   */
-  function parseInput() {
-      var yamlParsed, title, text = codemirror.getValue();
-
-      // loadFront() may fail, so we need to catch that
-      try {
-        yamlParsed = jsyaml.loadFront(text);
-        title = '<h1>' + (yamlParsed.title || '') + '</h1>';
-        $('#html-preview').html(title + kramed(yamlParsed.__content));
-      } catch (e) {
-        $('#html-preview').html(kramed(text));
-      }
-  }
-
-  $(document).ready(function() {
-    baseURL = $('#baseurl').html();
-    // gfm fixes table rendering, but also renders stuff correctly that fails in pandoc (lists without preceding blank line )
-    // see #5, #1
-    kramed.setOptions({
-      gfm: true,
-    });
-
-    codemirror = CodeMirror.fromTextArea($('#md-textarea')[0], {
-      mode: 'markdown',
-      lineWrapping: true,
-      autofocus: true,
-      extraKeys: {
-        'Ctrl-S': function(cm) { save(); },
-        'Ctrl-N': function(cm) { window.location = baseURL; }
-      }
-    });
-
-    codemirror.on('change', function () {
-      parseInput();
-      notsaved = true;
-    });
-
-    parseInput(); // initially populate the preview
-
-    // start in view mode, if we have a device with one-column view or its specified in the url hash
-    if($(window).width() < 767 || window.location.hash == '#viewmode')
-      toggleViewMode();
+  const body = JSON.stringify({
+    name,
+    markdown: editor.value(),
+    type: 'document'
   });
 
-  return {
-    save: save,
-    mail: mail,
-    insertSnippet: insertSnippet,
-    toggleViewMode: toggleViewMode
-  };
-})();
+  const url = `${baseURL}/api/save`
+  const res = await fetch(url, {
+    body,
+    headers: { 'Content-Type': 'application/json' },
+    method: 'POST',
+  })
+  const { saved } = await res.json()
+
+  notsaved = false
+  window.location = saved
+}

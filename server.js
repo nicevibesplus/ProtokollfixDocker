@@ -17,7 +17,7 @@ if (config.auth.enabled && !config.auth.saveOnly) webserver.use(auth);
 /* express config */
 webserver.set('view engine', 'pug');
 webserver.use(compression());
-webserver.use(bodyParser.urlencoded({ extended: true }));
+webserver.use(bodyParser.json());
 webserver.use(config.baseURL, express.static('static'));
 
 webserver.use(config.baseURL, routesFront);

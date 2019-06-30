@@ -12,40 +12,11 @@ html, body, .fullheight {
 
 body {
   margin: 0;
-  background: #c7cad1;
   overflow-x: hidden;
   padding-bottom: 90px;
 }
 
-#html-preview {
-  display: block;
-  overflow: auto;
-  background: #F8F8F8;
-  border: 1px solid #000;
-  border-radius: 4px;
-  padding: 0px 10px;
-}
 
 .CodeMirror {
-  height: 100% !important;
-  width: 100%;
-  padding: 10px 10px;
   background: #F8F8F8;
-  border: 1px solid #000;
-  border-radius: 4px;
-}
-
-/* custom style fixes for the html-preview */
-
-#html-preview td {
-  padding-right: 5px;
-  padding-left: 5px;
-}
-
-#html-preview img {
-  max-width: 98%;
-}
-
-#html-preview h1 {
-  text-align: center;
 }
