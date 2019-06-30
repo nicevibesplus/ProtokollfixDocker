@@ -8,19 +8,11 @@ block append head
 block append navleft
   - if (Object.keys(documents).length === 0) documents['no documents found.'] = '';
   - if (Object.keys(templates).length === 0) templates['no templates found.'] = '';
-  - if (Object.keys(snippets).length === 0)  snippets['no snippets found.'] = '';
   - templates['empty document'] = baseURL;
 
   +nav-dropdown(documents, true)(id='menu-documents')
     +glyphicon('folder-open')
     |&nbsp;&nbsp;documents
-  //- +nav-dropdown(templates, true)(id='menu-templates')
-  //-   +glyphicon('file')
-  //-   |&nbsp;new
-  +nav-dropdown(snippets, false)(id='menu-snippets')
-    +glyphicon('indent-left')
-    |&nbsp;insert
-  //- +nav-dropdown({'as document': 'protokollfix.save("document")', 'as template': 'protokollfix.save("template")', 'as snippet': 'protokollfix.save("snippet")'}, false)(id='menu-save')
   li: a(onclick='save("document")' style={cursor: 'pointer'})
     +glyphicon('floppy-disk')
     |&nbsp;save
@@ -33,20 +25,9 @@ block append navleft
         |&nbsp;PDF
 
 block prepend navright
-  //- if exportFormats
-  //-   +nav-dropdown(exportFormats, true)(id='menu-export')
-  //-     +glyphicon('export')
-  //-     |&nbsp;export
-
-  //- +nav-dropdown({'as markdown': 'protokollfix.mail(\'markdown\')', 'as HTML': 'protokollfix.mail(\'html\')'}, false)(id='menu-mail')
-  //-   +glyphicon('envelope')
-  //-   |&nbsp;mail
   li#btn-help: a(href='https://simplemde.com/markdown-guide' target='_blank')
     +glyphicon('question-sign')
     |&nbsp;markdown help
-  //- li: a#btn-mode(onclick='protokollfix.toggleViewMode()' style={cursor: 'pointer'})
-  //-   +glyphicon('blackboard')
-  //-   |&nbsp;view
 
 block pagecontent
   .row.fullheight
