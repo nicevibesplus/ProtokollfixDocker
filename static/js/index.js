@@ -7,10 +7,10 @@ const ABSTIMMUNG = `
 
 ||
 ------------:|:---
- dafür:      |
- dagegen:    |
- Enthaltung: |
- gesamt:     |
+ dafür:      | 0
+ dagegen:    | 0
+ Enthaltung: | 0
+ gesamt:     | 0
 
 Der Antrag wurde ____.
 `
