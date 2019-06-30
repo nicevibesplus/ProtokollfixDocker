@@ -3,16 +3,12 @@ var bodyParser = require('body-parser'),
   debug       = require('debug')('main'),
   express     = require('express');
 
-var auth      = require('./lib/auth')(),
-  config      = require('./config'),
+var config    = require('./config'),
   routesAPI   = require('./lib/routesAPI'),
   routesFront = require('./lib/routesFrontend'),
   loadDirectories = require('./lib/loadDirectories');
 
 var webserver = express();
-
-/* authentication for all requests. POST /save is handled seperately */
-if (config.auth.enabled && !config.auth.saveOnly) webserver.use(auth);
 
 /* express config */
 webserver.set('view engine', 'pug');
