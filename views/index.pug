@@ -19,7 +19,7 @@ block append navleft
 
   - if (file)
       //- FIXME: this is really hacky
-      - pdfURL = `https://geofs.uni-muenster.de/wp/wp-content/uploads/protokolle/${year}/${file.replace('.md', '.pdf')}`;
+      - pdfURL = uploadBaseURL + `/${year}/${file.replace('.md', '.pdf')}`;
       li#btn-pdf: a(href=pdfURL target='_blank')
         +glyphicon('file')
         |&nbsp;PDF
