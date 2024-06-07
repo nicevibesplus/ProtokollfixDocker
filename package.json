@@ -1,28 +1,29 @@
 {
-  "name": "Protokollfix",
-  "version": "0.0.1",
-  "description": "web based editor & viewer for markdown documents",
-  "author": "Norwin Roosen",
-  "license": "GPL-3.0",
-  "repository": {
-    "type": "git",
-    "url": "https://github.com/fs-geofs/Protokollfix"
-  },
-  "main": "node server.js",
-  "scripts": {
-    "postinstall": "npm install -g bower && bower install",
-    "test": "DEBUG=main, node server.js"
-  },
-  "dependencies": {
-    "async": "^2.6.1",
-    "body-parser": "^1.18.3",
-    "compression": "^1.7.2",
-    "express": "^4.16.3",
-    "fs-extra": "^6.0.1",
-    "pug": "^3.0.1",
-    "sanitize-filename": "^1.6.1"
-  },
-  "devDependencies": {
-    "debug": "^3.1.0"
-  }
+    "name": "Protokollfix",
+    "version": "0.0.1",
+    "description": "web based editor & viewer for markdown documents",
+    "author": "Norwin Roosen",
+    "license": "GPL-3.0",
+    "repository": {
+        "type": "git",
+        "url": "https://github.com/fs-geofs/Protokollfix"
+    },
+    "main": "node server.js",
+    "scripts": {
+        "postinstall": "npm install -g bower && bower install",
+        "test": "DEBUG=main, node server.js"
+    },
+    "dependencies": {
+        "async": "^2.6.1",
+        "body-parser": "^1.18.3",
+        "compression": "^1.7.2",
+        "express": "^4.16.3",
+        "fs-extra": "^6.0.1",
+        "pug": "^3.0.1",
+        "sanitize-filename": "^1.6.1",
+        "debug": "^3.1.0"
+    },
+    "devDependencies": {
+        "debug": "^3.1.0"
+    }
 }

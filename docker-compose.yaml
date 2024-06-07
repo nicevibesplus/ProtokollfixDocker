@@ -1,0 +1,6 @@
+services:
+  protokollfix:
+    image: test
+    container_name: protokollfix
+    ports:
+      - 2344:2344
